@@ -29,4 +29,7 @@ streamlit run .\web.py
 (https://www.youtube.com/watch?v=Hc79sDi3f0U "Now in Android: 55")    // Video Link
 
 
+<video src="https://www.w3schools.com/html/mov_bbb.mp4" controls="controls" width="500px"></video>
+
+
 
