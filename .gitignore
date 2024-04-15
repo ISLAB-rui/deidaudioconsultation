@@ -6,5 +6,8 @@ __pycache__
 lab
 
 
-model/*
+model/pythia/model_v5_EP8_2023_1130_1450_10/
 data/*
+
+
+!.gitkeep
