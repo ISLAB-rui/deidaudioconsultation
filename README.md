@@ -19,5 +19,7 @@ streamlit run .\web.py
 
 <video src="https://drive.google.com/file/d/1JOEJha1y37oo1jDPwLb1oIVHrFDIzxts/preview" width="320" height="240" controls></video>
 
+<iframe src="https://drive.google.com/file/d/1JOEJha1y37oo1jDPwLb1oIVHrFDIzxts/preview" width="640" height="480" allow="autoplay"></iframe>
+
 
 
