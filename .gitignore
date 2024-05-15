@@ -5,7 +5,7 @@ __pycache__
 
 lab
 
-
+.venv/*
 model/pythia/model_v5_EP8_2023_1130_1450_10/
 data/*
 
