@@ -33,9 +33,10 @@ class Deid_audio:
             self.asr = json.load(f)
         return self.asr
 
-    def model(self):
+    def model(self, model_path):
         apos = Audio_position(self.asr)
-        model = Deid_model('model/pythia/model_v5_EP8_2023_1130_1450_10')
+        # model = Deid_model('model/pythia/model_v5_EP8_2023_1130_1450_10')
+        model = Deid_model(model_path)
         for i in tqdm(range(len(apos))):
             labels = model(apos.get_sentence(i))[0]
             for label in labels:

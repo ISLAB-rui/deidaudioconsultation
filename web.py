@@ -2,9 +2,27 @@ import streamlit as st
 from pipeline import Deid_audio
 import time
 import json
+import os
+
+
+supported_model_list = [
+    'ISLabResearch/opendeid-70m-ft-full',
+    'ISLabResearch/opendeid-160m-ft-full',
+    'ISLabResearch/opendeid-410m-ft-full',
+    'ISLabResearch/opendeid-1b-ft-full',
+    'ISLabResearch/opendeid-2.8b-ft-full',
+    'ISLabResearch/opendeid-6.9b-ft-full',
+    'ISLabResearch/opendeid-12b-ft-full',
+]
 
 st.title("錄音檔去識別化 demo Website")
 # st.session_state.masked_file = None
+
+#use chinese  told user to choose a model first , before upload a file
+st.write("使用說明: 請先選擇一個模型，再上傳錄音檔")
+
+# a select box for choosing the model
+model_option = st.selectbox('Choose a model', supported_model_list)
 
 if 'masked_file' not in st.session_state:
     st.session_state['masked_file'] = None
@@ -15,6 +33,8 @@ def upf():
     print(f"file uploaded {time.time()}")
     if st.session_state['file_upload'] is not None:
         # save the file
+        # make a folder for saving the file
+        os.makedirs('./.output', exist_ok=True)
         with open(f'./.output/{st.session_state["file_upload"].name}', 'wb') as f:
             f.write(st.session_state['file_upload'].getvalue())
         st.session_state.new_file = True
@@ -31,6 +51,9 @@ if st.session_state.new_file:
     # print wait message
     pw = st.empty()
     pw.text('Please wait for a while...')
+    show_selected_model = st.empty()
+    show_selected_model.text(f"Selected model: {model_option}")
+    
     st.session_state.new_file = False
 
     # add press bar
@@ -43,7 +66,7 @@ if st.session_state.new_file:
     my_bar.progress(30)
     
     status_text.text('pythia model...')
-    deid.model()
+    deid.model(model_option)
     my_bar.progress(80)
     
     status_text.text('mask audio...')

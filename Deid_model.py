@@ -31,12 +31,13 @@ class Deid_model:
         pred = pred.strip() 
         labels = []
         for l in pred.split('\n'):
-            if l != '' and l != 'PHI: NULL':
+            if l != '' and l != 'PHI: NULL' and ':' in l:
                 label = l.split(':')[0].strip()
                 content = l.split(':')[1].strip()
                 if '=>' in content:
                     content = content.split('=>')[0].strip()
-                labels.append([label, content])
+                if content != '':
+                    labels.append([label, content])
         return labels
 
     def __call__(self , text):
@@ -62,8 +63,19 @@ class Deid_model:
 if __name__ == '__main__':
     
 
-    model = Deid_model('model/pythia/model_v5_EP8_2023_1130_1450_10')
+    # model = Deid_model('model/pythia/model_v5_EP8_2023_1130_1450_10')
 
+
+    # test islab model
+    # ISLabResearch/opendeid-70m-ft-full
+    # ISLabResearch/opendeid-160m-ft-full
+    # ISLabResearch/opendeid-410m-ft-full
+    # ISLabResearch/opendeid-1b-ft-full
+    # ISLabResearch/opendeid-2.8b-ft-full
+    # ISLabResearch/opendeid-6.9b-ft-full
+    # ISLabResearch/opendeid-12b-ft-full
+
+    model = Deid_model('ISLabResearch/opendeid-410m-ft-full')
 
     # test __call__
     s = 'Hi, Doctor Rhee. I am a 23'
