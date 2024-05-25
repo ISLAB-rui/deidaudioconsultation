@@ -27,9 +27,10 @@ streamlit run .\web.py
 ```
 
 
-## demo video
+## demo web img
+![螢幕擷取畫面 2024-05-25 215646](https://github.com/ISLAB-rui/deidaudioconsultation/assets/56379887/b7cc08a3-ad3a-4de3-b580-963460596ae2)
 
-https://github.com/ISLAB-rui/deidaudioconsultation/assets/56379887/896333fa-4e41-429b-b6a1-9d44514bd1af
+![螢幕擷取畫面 2024-05-25 215532](https://github.com/ISLAB-rui/deidaudioconsultation/assets/56379887/b1ecbd5d-cd9f-4102-a71d-4589940b1b99)
 
 
 
