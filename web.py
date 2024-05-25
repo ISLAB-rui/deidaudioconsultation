@@ -6,6 +6,9 @@ import os
 
 
 supported_model_list = [
+    # lora model
+    'ISLabResearch/opendeid-410m-lora-sampled',
+
     'ISLabResearch/opendeid-70m-ft-full',
     'ISLabResearch/opendeid-160m-ft-full',
     'ISLabResearch/opendeid-410m-ft-full',
@@ -13,6 +16,9 @@ supported_model_list = [
     'ISLabResearch/opendeid-2.8b-ft-full',
     'ISLabResearch/opendeid-6.9b-ft-full',
     'ISLabResearch/opendeid-12b-ft-full',
+
+    # 'zhaorui-nb/aicup-pythia-160m',
+
 ]
 
 st.title("錄音檔去識別化 demo Website")
