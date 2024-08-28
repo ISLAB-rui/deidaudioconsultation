@@ -1,5 +1,5 @@
 import streamlit as st
-from pipeline import Deid_audio
+from utils.pipeline import Deid_audio
 import time
 import json
 import os
@@ -17,7 +17,7 @@ supported_model_list = [
     'ISLabResearch/opendeid-6.9b-ft-full',
     'ISLabResearch/opendeid-12b-ft-full',
 
-    # 'zhaorui-nb/aicup-pythia-160m',
+    'zhaorui-nb/aicup-pythia-160m',
 
 ]
 

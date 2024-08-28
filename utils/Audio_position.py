@@ -27,6 +27,11 @@ class Audio_position:
         for seg in self.segments:
             for word in seg['words']:
                 word['mask'] = False
+
+        # add mask type
+        for seg in self.segments:
+            for word in seg['words']:
+                word['mask_type'] = ''
     
         '''
         |-- segments[]
@@ -105,7 +110,7 @@ class Audio_position:
             start_w_index += 1
         return None
 
-    def set_mask(self, sentence_index,  mask_range ,mask_value=True):
+    def set_mask(self, sentence_index,  mask_range, mask_type='<MASK>' ,mask_value=True):
         """
         Set the mask attribute of a word.
         """
@@ -118,8 +123,7 @@ class Audio_position:
 
         for i in range(mask_range[0], mask_range[1]):
             self.segments[sentence_index]['words'][i]['mask'] = mask_value
-
-
+            self.segments[sentence_index]['words'][i]['mask_type'] = mask_type
 
     def print_segments(self , s , e):
         print(json.dumps(self.segments[s:e], indent=4))
@@ -132,6 +136,8 @@ class Audio_position:
             words = []
             start_t = None
             end_t = None
+
+            start_type = ''
 
             # some word dont start or end time, will use last word's time
             # last_start = 0
@@ -148,13 +154,16 @@ class Audio_position:
                     start_t = word['start'] if 'start' in word.keys() else seg_start
                     end_t = word['end'] if 'end' in word.keys() else seg_end
                     words.append(word['word'])
+                    start_type = word['mask_type']
                 elif last_mask == True and word['mask'] == True:
                     end_t = word['end'] if 'end' in word.keys() and end_t < word['end'] else seg_end
                     #if end_t < word['end'] else end_t
                     words.append(word['word'])
                 elif last_mask == True and word['mask'] == False:
                     if len(words)>0 and start_t != None and end_t != None:
-                        self.mask.append({'str': ' '.join(words), 'start': start_t, 'end': end_t})
+                        # self.mask.append({'str': ' '.join(words), 'start': start_t, 'end': end_t})
+                        self.mask.append({'str': ' '.join(words), 'type': start_type, 'start': start_t, 'end': end_t})                                           
+                        
                     words = []
                     start_t = None
                     end_t = None
@@ -169,7 +178,10 @@ class Audio_position:
                     # if start_t > end_t:
                     #     start_t, end_t = end_t, start_t
                     if start_t < end_t:
-                        self.mask.append({'str': ' '.join(words), 'start': start_t, 'end': end_t})
+                        mask_type = word['mask_type']
+                        # self.mask.append({'str': ' '.join(words), 'start': start_t, 'end': end_t})
+                        self.mask.append({'str': ' '.join(words), 'type': start_type, 'start': start_t, 'end': end_t})                                           
+
                 words = []
         return self.mask
     

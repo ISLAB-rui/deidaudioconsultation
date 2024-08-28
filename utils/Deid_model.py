@@ -75,7 +75,8 @@ if __name__ == '__main__':
     # ISLabResearch/opendeid-6.9b-ft-full
     # ISLabResearch/opendeid-12b-ft-full
 
-    model = Deid_model('ISLabResearch/opendeid-410m-ft-full')
+    # model = Deid_model('ISLabResearch/opendeid-410m-ft-full')
+    model = Deid_model('zhaorui-nb/aicup-pythia-160m')
 
     # test __call__
     s = 'Hi, Doctor Rhee. I am a 23'

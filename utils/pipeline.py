@@ -3,15 +3,17 @@ import subprocess
 import json
 from pydub import AudioSegment
 import os
+import sys
 
-from Deid_model import Deid_model
-from Audio_position import Audio_position
+from .Deid_model import Deid_model
+from .Audio_position import Audio_position
 
 class Deid_audio:
 
     def __init__(self, input_file):
         self.input_file = input_file
-        self.file_name = self.input_file.split('/')[-1].replace('.mp3', '')
+        # self.file_name = self.input_file.split('/')[-1].replace('.mp3', '')
+        self.file_name = os.path.basename(self.input_file).replace('.mp3', '')
         self.asr = None #json
         self.mask_time = None #list [[start, end], [start, end]...]
         self.model_save_path = f'./.output/{self.file_name}_mask.json'
@@ -19,17 +21,22 @@ class Deid_audio:
 
 
     def wisperx(self):
-        args = ['whisperx', '--language', 'en', '--output_dir', './.output', self.input_file]
-        process = subprocess.Popen(args, stdout=subprocess.PIPE, text=True)
-        while True:
-            output = process.stdout.readline()
-            if output == '' and process.poll() is not None:
-                break
-            if output:
-                print(output.strip())
+        # args = ['whisperx', '--language', 'en', '--output_dir', './.output', self.input_file]
+        # process = subprocess.Popen(args, stdout=subprocess.PIPE, text=True)
+        # while True:
+        #     output = process.stdout.readline()
+        #     if output == '' and process.poll() is not None:
+        #         break
+        #     if output:
+        #         print(output.strip())
 
-        file_name = self.input_file.split('/')[-1]
-        with open(f"./.output/{file_name.replace('.mp3', '.json')}") as f:
+        command = f'whisperx --language en --output_dir ./.output {self.input_file}'
+        os.system(command)
+
+
+        # file_name = self.input_file.split('/')[-1]
+        # with open(f"./.output/{file_name.replace('.mp3', '.json')}") as f:
+        with open(f"./.output/{self.file_name}.json") as f:
             self.asr = json.load(f)
         return self.asr
 
@@ -39,9 +46,9 @@ class Deid_audio:
         model = Deid_model(model_path)
         for i in tqdm(range(len(apos))):
             labels = model(apos.get_sentence(i))[0]
-            for label in labels:
+            for label in labels: # [label, content]
                 m_index = apos.search_continuous_word_index(i , label[1])
-                apos.set_mask(i, m_index)
+                apos.set_mask(i, m_index, mask_type=label[0])   
         apos.generate_mask()
         mask = apos.get_mask()
 
@@ -50,7 +57,6 @@ class Deid_audio:
             f.write(j)
             print(j)
         self.mask_time = apos.get_mask_time()
-    
 
     def mask_audio(self):
         audio = AudioSegment.from_file(self.input_file)
@@ -66,6 +72,8 @@ class Deid_audio:
     def get_mask_time(self):  
         return self.mask_time
     def get_masked_json(self):
+        return self.model_save_path
+    def get_model_save_path(self):
         return self.model_save_path
 
 
@@ -115,9 +123,9 @@ if __name__ == '__main__':
 
     deid = Deid_audio(INPUT_FILE)
     deid.wisperx()
-    deid.model()
-    deid.mask_audio()
-    print(deid.get_masked_file_path())
+    # deid.model()
+    # deid.mask_audio()
+    # print(deid.get_masked_file_path())
 
 
 
